@@ -441,20 +441,19 @@
             </div>
         </section>
 
-        <!-- SECTION 2.8: CINEMATIC 3-STEP CAKE THEATRE STAGE -->
+        <!-- SECTION 2.8: CINEMATIC CAKE THEATRE STAGE -->
         <section id="cakeTheatreSection" class="cake-theatre-section story-page">
             <div class="cake-stage-spotlight" id="cakeStageSpotlight"></div>
+            <div class="floating-gold-particles" id="goldParticlesContainer"></div>
 
             <div class="cake-theatre-content">
-                <!-- Step 1: Teaser Text Overlay -->
-                <div id="cakeTeaserBox" class="cake-teaser-box">
-                    <p id="cakeTeaser1" class="cake-teaser-text">Okay <span class="dynamic-friend-name">Lalli</span>...</p>
-                    <p id="cakeTeaser2" class="cake-teaser-text hidden-step">It's officially cake time. 🎂</p>
-                    <p id="cakeTeaser3" class="cake-teaser-text hidden-step">Make a wish, <span class="dynamic-friend-name">Lalli</span>... ✨</p>
-                </div>
+                <!-- Top Teaser Text -->
+                <h2 class="cake-main-teaser" id="cakeMainTeaser">
+                    Make a wish, <span class="dynamic-friend-name">LALLI</span>... ✨
+                </h2>
 
-                <!-- Step 2: Rising Cake Stage Container -->
-                <div id="risingCakeStage" class="rising-cake-stage hidden-step">
+                <!-- 3-Tier Luxury Birthday Cake -->
+                <div id="risingCakeStage" class="rising-cake-stage">
                     <!-- Name Topper -->
                     <div class="cake-topper-wrapper" id="cakeTopper">
                         <div class="topper-crown"><i class="fa-solid fa-crown"></i></div>
@@ -465,7 +464,7 @@
                         </div>
                     </div>
 
-                    <!-- 5 Beautiful Candles Row -->
+                    <!-- 5 Decorative Candles Row -->
                     <div class="candles-row-5" id="candlesRow5">
                         <div class="candle-item candle-1" data-candle="1">
                             <div class="flame-glow" id="flameGlow1"></div>
@@ -522,73 +521,52 @@
                         <!-- Plate & Underneath Floor Glow -->
                         <div class="cake-plate-gold"></div>
                         <div class="cake-floor-glow"></div>
-
-                        <!-- Slice of Cake Element (Separates when cut) -->
-                        <div id="cakeSlice" class="cake-slice hidden-slice">
-                            <div class="slice-layer slice-top"></div>
-                            <div class="slice-layer slice-mid"></div>
-                            <div class="slice-layer slice-bot"></div>
-                            <div class="slice-berry">🍓</div>
-                            <div class="slice-plate"></div>
-                        </div>
-
-                        <!-- Draggable Golden Knife -->
-                        <div id="goldenKnife" class="golden-knife hidden-knife">
-                            <div class="knife-blade"></div>
-                            <div class="knife-handle"></div>
-                            <div class="knife-sparkle">✨</div>
-                        </div>
-                    </div>
-
-                    <!-- Cake Interactive Decorator & Controls Toolbar -->
-                    <div id="cakeCustomToolbar" class="cake-custom-toolbar hidden-step">
-                        <button id="cutCakeInteractiveBtn" class="cake-tool-btn cut-tool">
-                            <i class="fa-solid fa-utensils"></i> <span>🔪 CUT THE CAKE</span>
-                        </button>
-                        <button id="relightCandlesBtn" class="cake-tool-btn">
-                            <i class="fa-solid fa-fire"></i> <span>🕯️ Relight Candles</span>
-                        </button>
-                        <button id="addStrawberriesBtn" class="cake-tool-btn">
-                            <i class="fa-solid fa-heart"></i> <span>🍓 Add Strawberries</span>
-                        </button>
-                        <button id="singSongBtn" class="cake-tool-btn">
-                            <i class="fa-solid fa-music"></i> <span>🎵 Sing Birthday Melody</span>
-                        </button>
                     </div>
                 </div>
 
-                <!-- Interactive Blow Candles Button -->
-                <div id="blowActionContainer" class="blow-action-container hidden-step">
-                    <button id="blowCandlesBtn" class="blow-candles-btn">
-                        <span class="btn-icon"><i class="fa-solid fa-wind"></i></span>
-                        <span>🕯️ BLOW THE CANDLES</span>
+                <!-- Single Dynamic Action Button Container -->
+                <div id="cakeActionContainer" class="cake-action-container">
+                    <!-- Step 1 Button: LIGHT THE CANDLES -->
+                    <button id="lightCandlesBtn" class="cake-primary-btn">
+                        <span class="btn-sparkle"><i class="fa-solid fa-fire-flame-curved"></i></span>
+                        <span>🕯️ LIGHT THE CANDLES</span>
+                        <span class="btn-glow"></span>
                     </button>
-                    <button id="micBlowBtn" class="mic-btn">
-                        <i class="fa-solid fa-microphone"></i> Use Microphone
+
+                    <!-- Step 2 Button: BLOW THE CANDLES (Initially Hidden) -->
+                    <button id="blowCandlesBtn" class="cake-primary-btn hidden-step">
+                        <span class="btn-sparkle"><i class="fa-solid fa-wind"></i></span>
+                        <span>💨 BLOW THE CANDLES</span>
+                        <span class="btn-glow"></span>
                     </button>
                 </div>
 
-                <!-- Final Celebration Banner & Wish Lantern -->
+                <!-- Final Celebration Banner & Glassmorphism Wish Card -->
                 <div id="finalCakeBanner" class="final-cake-banner hidden-step">
                     <h1 class="grand-birthday-title">
                         🎉 HAPPY BIRTHDAY <span class="dynamic-friend-name">LALLI</span>! ❤️
                     </h1>
                     <p class="grand-subtext">Make a wish. You deserve all the happiness in the world. ✨</p>
 
-                    <!-- Interactive Sky Wish Box -->
-                    <div class="wish-lantern-card">
-                        <div class="wish-card-glow"></div>
-                        <h3><i class="fa-solid fa-wand-magic-sparkles"></i> Make a Special Birthday Wish for <span class="dynamic-friend-name">Lalli</span></h3>
-                        <div class="wish-input-group">
-                            <input type="text" id="wishInput" placeholder="Write your secret wish here..." maxlength="120">
-                            <button id="sendWishBtn" class="send-wish-btn">
+                    <!-- Glassmorphism Wish Card -->
+                    <div class="wish-glass-card" id="wishGlassCard">
+                        <div class="card-glow-line"></div>
+                        <h3 class="wish-card-title">✨ Make a Special Birthday Wish for <span class="dynamic-friend-name">LALLI</span></h3>
+                        
+                        <div class="wish-input-wrapper" id="wishInputWrapper">
+                            <input type="text" id="wishInput" class="custom-wish-input" placeholder="Write your secret wish here..." maxlength="120" autocomplete="off">
+                            <button id="sendWishBtn" class="wish-release-btn">
                                 <span>✨ RELEASE WISH TO THE STARS ✨</span>
                             </button>
                         </div>
-                        <div id="lanternFlyStage" class="lantern-fly-stage"></div>
+                        
+                        <div id="wishSentMsg" class="wish-sent-msg hidden-step">
+                            Your wish has been sent to the stars. ✨❤️
+                        </div>
                     </div>
 
-                    <div class="post-cake-actions">
+                    <!-- Final Continuation Button -->
+                    <div class="post-cake-actions hidden-step" id="crazyZoneAction">
                         <button id="proceedToSecretBtn" class="glow-action-btn secret-trigger-btn">
                             <i class="fa-solid fa-fire"></i> 😈 ENTER THE CRAZY ZONE
                         </button>

@@ -1047,13 +1047,17 @@ I still need my crazy best friend. 😂🫶
     const cakeTheatreSection = document.getElementById('cakeTheatreSection');
     const cakeTeaser1 = document.getElementById('cakeTeaser1');
     const cakeTeaser2 = document.getElementById('cakeTeaser2');
-    const cakeTeaser3 = document.getElementById('cakeTeaser3');
-    const risingCakeStage = document.getElementById('risingCakeStage');
-    const blowActionContainer = document.getElementById('blowActionContainer');
+    // --------------------------------------------------------------------------
+    // 8. SECTION 2.8: CINEMATIC CAKE THEATRE STAGE & WISH FLOW
+    // --------------------------------------------------------------------------
+    const lightCandlesBtn = document.getElementById('lightCandlesBtn');
     const blowCandlesBtn = document.getElementById('blowCandlesBtn');
-    const micBlowBtn = document.getElementById('micBlowBtn');
     const finalCakeBanner = document.getElementById('finalCakeBanner');
-    const cakeStageSpotlight = document.getElementById('cakeStageSpotlight');
+    const wishInput = document.getElementById('wishInput');
+    const sendWishBtn = document.getElementById('sendWishBtn');
+    const wishInputWrapper = document.getElementById('wishInputWrapper');
+    const wishSentMsg = document.getElementById('wishSentMsg');
+    const crazyZoneAction = document.getElementById('crazyZoneAction');
     const quickCakeBtn = document.getElementById('quickCakeBtn');
 
     if (quickCakeBtn) {
@@ -1073,269 +1077,149 @@ I still need my crazy best friend. 😂🫶
         });
     }
 
-    function startCinematicCakeSequence() {
-        // STEP 1: Teaser Messages
-        gsap.to(cakeTeaser1, { opacity: 1, duration: 0.8, delay: 0.4 });
-
-        setTimeout(() => {
-            gsap.to(cakeTeaser1, {
-                opacity: 0,
-                duration: 0.5,
-                onComplete: () => {
-                    cakeTeaser1.classList.add('hidden-step');
-                    cakeTeaser2.classList.remove('hidden-step');
-                    gsap.to(cakeTeaser2, { opacity: 1, duration: 0.8 });
-                }
+    // Step 1: Click "LIGHT THE CANDLES"
+    if (lightCandlesBtn) {
+        lightCandlesBtn.addEventListener('click', () => {
+            playTone(440, 'triangle', 0.4, 0.3);
+            
+            // Ignite candles one by one
+            const candles = document.querySelectorAll('.candle-item');
+            candles.forEach((c, idx) => {
+                setTimeout(() => {
+                    c.classList.add('ignited');
+                    playTone(350 + idx * 90, 'sine', 0.25, 0.2);
+                }, idx * 300);
             });
-        }, 2000);
 
-        // STEP 2: Cake Rises From Below (translateY 120vh -> 0 with bounce)
-        setTimeout(() => {
-            gsap.to(cakeTeaser2, {
-                opacity: 0,
-                duration: 0.6,
-                onComplete: () => {
-                    cakeTeaser2.classList.add('hidden-step');
-
-                    // Reveal Rising Stage
-                    risingCakeStage.classList.remove('hidden-step');
-                    gsap.fromTo(risingCakeStage,
-                        { y: '120vh', scale: 0.85, opacity: 1 },
-                        {
-                            y: 0,
-                            scale: 1,
-                            duration: 1.8,
-                            ease: 'back.out(1.3)',
-                            onComplete: () => {
-                                playTone(440, 'triangle', 0.8, 0.3);
-
-                                // STEP 3: Candles Ignite One-by-One
-                                igniteCandlesOneByOne();
-                            }
-                        }
-                    );
-                }
-            });
-        }, 4200);
-    }
-
-    function igniteCandlesOneByOne() {
-        const candles = document.querySelectorAll('.candle-item');
-        candles.forEach((c, idx) => {
+            // Once all candles are lit, swap to "BLOW THE CANDLES" button
+            const totalIgniteTime = candles.length * 300 + 300;
             setTimeout(() => {
-                c.classList.add('ignited');
-                playTone(350 + idx * 90, 'sine', 0.25, 0.2);
-            }, idx * 350);
-        });
-
-        // After all 5 candles ignite:
-        setTimeout(() => {
-            cakeTeaser3.classList.remove('hidden-step');
-            gsap.to(cakeTeaser3, { opacity: 1, duration: 0.8 });
-
-            blowActionContainer.classList.remove('hidden-step');
-            gsap.fromTo(blowActionContainer, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.8, ease: 'back.out(1.6)' });
-        }, 5 * 350 + 400);
-    }
-
-    // FINAL CAKE INTERACTION: Blow Candles Out
-    if (blowCandlesBtn) {
-        blowCandlesBtn.addEventListener('click', blowOutAllCandles);
-    }
-
-    function blowOutAllCandles() {
-        playTone(300, 'triangle', 0.4, 0.3);
-
-        const candles = document.querySelectorAll('.candle-item');
-        
-        // 1. Flames flicker strongly
-        candles.forEach(c => c.classList.add('flickering-strong'));
-
-        // 2. Stage spotlight dims briefly
-        if (cakeStageSpotlight) {
-            gsap.to(cakeStageSpotlight, { opacity: 0.3, duration: 0.8 });
-        }
-
-        // 3. Candles turn off one-by-one with smoke puffs
-        candles.forEach((c, idx) => {
-            setTimeout(() => {
-                c.classList.remove('ignited', 'flickering-strong');
-                const smoke = c.querySelector('.smoke-puff');
-                if (smoke) smoke.classList.add('active');
-                playTone(500 - idx * 60, 'sine', 0.15, 0.15);
-            }, idx * 300);
-        });
-
-        // 4. Once all candles are out: Lights flare, fireworks explode!
-        const totalDuration = candles.length * 300 + 500;
-        setTimeout(() => {
-            // Stage lights flare back on
-            if (cakeStageSpotlight) {
-                gsap.to(cakeStageSpotlight, { opacity: 1, duration: 0.8 });
-            }
-
-            // Confetti Explosion
-            if (typeof confetti === 'function') {
-                confetti({
-                    particleCount: 220,
-                    spread: 120,
-                    colors: ['#ffd700', '#ff2a6d', '#ffffff', '#05d9e8'],
-                    origin: { y: 0.5 }
-                });
-            }
-
-            triggerRandomFireworks(8);
-            playFanfareSound();
-
-            // Hide Teaser Box & Blow Controls
-            const cakeTeaserBox = document.getElementById('cakeTeaserBox');
-            if (cakeTeaserBox) cakeTeaserBox.style.display = 'none';
-            if (blowActionContainer) blowActionContainer.style.display = 'none';
-
-            // Reveal Cake Customization Toolbar & Final Celebration Banner
-            const cakeCustomToolbar = document.getElementById('cakeCustomToolbar');
-            if (cakeCustomToolbar) {
-                cakeCustomToolbar.classList.remove('hidden-step');
-                gsap.fromTo(cakeCustomToolbar, { opacity: 0, y: 15 }, { opacity: 1, y: 0, duration: 0.8 });
-            }
-
-            finalCakeBanner.classList.remove('hidden-step');
-            gsap.fromTo(finalCakeBanner,
-                { opacity: 0, scale: 0.85, y: 30 },
-                { opacity: 1, scale: 1, y: 0, duration: 1.2, ease: 'elastic.out(1, 0.6)' }
-            );
-        }, totalDuration);
-    }
-
-    // Interactive Cake Cutting & Custom Tools
-    const cutCakeInteractiveBtn = document.getElementById('cutCakeInteractiveBtn');
-    const relightCandlesBtn = document.getElementById('relightCandlesBtn');
-    const addStrawberriesBtn = document.getElementById('addStrawberriesBtn');
-    const singSongBtn = document.getElementById('singSongBtn');
-    const goldenKnife = document.getElementById('goldenKnife');
-    const cakeSlice = document.getElementById('cakeSlice');
-
-    if (cutCakeInteractiveBtn) {
-        cutCakeInteractiveBtn.addEventListener('click', () => {
-            playTone(600, 'sawtooth', 0.15, 0.2);
-
-            // Animate knife slicing down through cake
-            if (goldenKnife) {
-                goldenKnife.classList.remove('hidden-knife');
-                gsap.fromTo(goldenKnife,
-                    { x: '-50%', y: '-60px', opacity: 0, rotate: -45 },
-                    {
-                        x: '-50%', y: '40px', opacity: 1, rotate: 10, duration: 0.8, ease: 'power2.inOut',
-                        onComplete: () => {
-                            // Slice cut SFX & sparkles
-                            playTone(880, 'sine', 0.3, 0.3);
-                            if (typeof confetti === 'function') {
-                                confetti({ particleCount: 60, spread: 70, origin: { y: 0.6 } });
-                            }
-
-                            // Reveal cake slice sliding out to golden plate
-                            if (cakeSlice) {
-                                cakeSlice.classList.remove('hidden-slice');
-                                gsap.fromTo(cakeSlice,
-                                    { x: 0, scale: 0.2, opacity: 0 },
-                                    { x: 40, scale: 1, opacity: 1, duration: 1, ease: 'back.out(1.5)' }
-                                );
-                            }
-
-                            // Retract knife smoothly
-                            gsap.to(goldenKnife, { y: '-80px', opacity: 0, duration: 0.8, delay: 0.5 });
-                        }
+                gsap.to(lightCandlesBtn, {
+                    opacity: 0,
+                    scale: 0.8,
+                    duration: 0.4,
+                    onComplete: () => {
+                        lightCandlesBtn.classList.add('hidden-step');
+                        blowCandlesBtn.classList.remove('hidden-step');
+                        gsap.fromTo(blowCandlesBtn,
+                            { opacity: 0, scale: 0.85, y: 15 },
+                            { opacity: 1, scale: 1, y: 0, duration: 0.6, ease: 'back.out(1.6)' }
+                        );
                     }
-                );
-            }
+                });
+            }, totalIgniteTime);
         });
     }
 
-    if (relightCandlesBtn) {
-        relightCandlesBtn.addEventListener('click', () => {
-            igniteCandlesOneByOne();
-        });
-    }
+    // Step 2: Click "BLOW THE CANDLES"
+    if (blowCandlesBtn) {
+        blowCandlesBtn.addEventListener('click', () => {
+            playTone(300, 'triangle', 0.4, 0.3);
+            const candles = document.querySelectorAll('.candle-item');
 
-    if (addStrawberriesBtn) {
-        addStrawberriesBtn.addEventListener('click', () => {
-            playTone(700, 'sine', 0.2, 0.2);
-            const topTier = document.querySelector('.tier-top');
-            if (topTier) {
-                for (let i = 0; i < 3; i++) {
-                    const berry = document.createElement('span');
-                    berry.textContent = '🍓';
-                    berry.style.position = 'absolute';
-                    berry.style.top = '-14px';
-                    berry.style.left = (25 + i * 50) + 'px';
-                    berry.style.fontSize = '1.2rem';
-                    berry.style.animation = 'bounceIn 0.5s ease forward';
-                    topTier.appendChild(berry);
+            // Flames flicker strongly
+            candles.forEach(c => c.classList.add('flickering-strong'));
+
+            // Turn flames off one by one with smoke puffs
+            candles.forEach((c, idx) => {
+                setTimeout(() => {
+                    c.classList.remove('ignited', 'flickering-strong');
+                    const smoke = c.querySelector('.smoke-puff');
+                    if (smoke) smoke.classList.add('active');
+                    playTone(500 - idx * 60, 'sine', 0.15, 0.15);
+                }, idx * 280);
+            });
+
+            // Once candles are blown out: Confetti burst, fireworks, & reveal Celebration Banner
+            const totalBlowTime = candles.length * 280 + 400;
+            setTimeout(() => {
+                if (typeof confetti === 'function') {
+                    confetti({
+                        particleCount: 220,
+                        spread: 120,
+                        colors: ['#ffd700', '#ff2a6d', '#ffffff', '#05d9e8'],
+                        origin: { y: 0.5 }
+                    });
                 }
-            }
+
+                triggerRandomFireworks(8);
+                playFanfareSound();
+
+                // Hide Action Button Container
+                const cakeActionContainer = document.getElementById('cakeActionContainer');
+                if (cakeActionContainer) cakeActionContainer.style.display = 'none';
+
+                // Reveal Final Celebration Banner & Wish Card
+                finalCakeBanner.classList.remove('hidden-step');
+                gsap.fromTo(finalCakeBanner,
+                    { opacity: 0, scale: 0.88, y: 25 },
+                    { opacity: 1, scale: 1, y: 0, duration: 1, ease: 'elastic.out(1, 0.7)' }
+                );
+            }, totalBlowTime);
         });
     }
 
-    if (singSongBtn) {
-        singSongBtn.addEventListener('click', () => {
-            startBirthdayMelody();
-            playFanfareSound();
-            if (typeof confetti === 'function') {
-                confetti({ particleCount: 100, spread: 90, origin: { y: 0.5 } });
-            }
-        });
-    }
-
-    // Sky Wish Lantern Release Handler
-    const sendWishBtn = document.getElementById('sendWishBtn');
-    const wishInput = document.getElementById('wishInput');
-
+    // Step 3: Release Wish to the Stars
     if (sendWishBtn && wishInput) {
         sendWishBtn.addEventListener('click', () => {
             const wishText = wishInput.value.trim() || `Happy Birthday ${friendName}! ✨`;
-
             playTone(587.33, 'triangle', 0.4, 0.4);
 
-            // Create floating sky lantern element
-            const lantern = document.createElement('div');
-            lantern.className = 'sky-wish-lantern';
-            lantern.innerHTML = `
-                <div class="lantern-body">
-                    <span class="lantern-flame">🔥</span>
-                    <p class="lantern-text">"${wishText}"</p>
-                </div>
-            `;
-            lantern.style.position = 'fixed';
-            lantern.style.bottom = '100px';
-            lantern.style.left = (30 + Math.random() * 40) + '%';
-            lantern.style.padding = '1rem 1.5rem';
-            lantern.style.background = 'linear-gradient(135deg, rgba(255, 180, 0, 0.95), rgba(255, 80, 0, 0.95))';
-            lantern.style.borderRadius = '20px 20px 8px 8px';
-            lantern.style.boxShadow = '0 0 30px rgba(255, 165, 0, 0.9), 0 0 60px rgba(255, 80, 0, 0.6)';
-            lantern.style.color = '#ffffff';
-            lantern.style.fontFamily = 'var(--font-fun)';
-            lantern.style.fontWeight = 'bold';
-            lantern.style.zIndex = '999999';
-            lantern.style.pointerEvents = 'none';
+            // Animate input container dissolving into floating particles
+            if (wishInputWrapper) {
+                gsap.to(wishInputWrapper, {
+                    opacity: 0,
+                    y: -20,
+                    duration: 0.6,
+                    onComplete: () => {
+                        wishInputWrapper.classList.add('hidden-step');
+                        
+                        // Show "Your wish has been sent to the stars. ✨❤️"
+                        if (wishSentMsg) {
+                            wishSentMsg.classList.remove('hidden-step');
+                            gsap.fromTo(wishSentMsg,
+                                { opacity: 0, scale: 0.8, y: 15 },
+                                { opacity: 1, scale: 1, y: 0, duration: 0.8, ease: 'back.out(1.5)' }
+                            );
+                        }
 
-            document.body.appendChild(lantern);
+                        // Show "ENTER THE CRAZY ZONE" button
+                        if (crazyZoneAction) {
+                            crazyZoneAction.classList.remove('hidden-step');
+                            gsap.fromTo(crazyZoneAction,
+                                { opacity: 0, y: 20 },
+                                { opacity: 1, y: 0, duration: 0.8, delay: 0.4, ease: 'back.out(1.4)' }
+                            );
+                        }
+                    }
+                });
+            }
 
-            // Animate lantern rising into space
-            gsap.to(lantern, {
-                y: '-120vh',
-                x: '+=60',
-                scale: 0.5,
-                opacity: 0,
-                duration: 6,
-                ease: 'power1.in',
-                onComplete: () => lantern.remove()
-            });
+            // Create floating glowing particles rising up into space
+            for (let i = 0; i < 20; i++) {
+                setTimeout(() => {
+                    const particle = document.createElement('div');
+                    particle.className = 'star-wish-particle';
+                    particle.textContent = ['✨', '⭐', '💫', '💖'][Math.floor(Math.random() * 4)];
+                    particle.style.position = 'fixed';
+                    particle.style.bottom = '150px';
+                    particle.style.left = (35 + Math.random() * 30) + '%';
+                    particle.style.fontSize = (1.2 + Math.random() * 1.5) + 'rem';
+                    particle.style.zIndex = '99999';
+                    particle.style.pointerEvents = 'none';
 
-            wishInput.value = '';
-            sendWishBtn.innerHTML = '<span>✨ WISH SENT TO THE HEAVENS! ❤️</span>';
-            setTimeout(() => {
-                sendWishBtn.innerHTML = '<span>✨ RELEASE ANOTHER WISH ✨</span>';
-            }, 3000);
+                    document.body.appendChild(particle);
+
+                    gsap.to(particle, {
+                        y: '-110vh',
+                        x: (Math.random() - 0.5) * 150,
+                        opacity: 0,
+                        duration: 3 + Math.random() * 2,
+                        ease: 'power1.out',
+                        onComplete: () => particle.remove()
+                    });
+                }, i * 80);
+            }
         });
     }
 
