@@ -1155,7 +1155,14 @@ I still need my crazy best friend. 😂🫶
 
         const photoObj = albumData.photos[currentPhotoIdxInAlbum];
 
-        if (bookPhotoImg) bookPhotoImg.src = photoObj.img;
+        if (bookPhotoImg) {
+            bookPhotoImg.onerror = function() {
+                const fallbackNum = (currentPhotoIdxInAlbum % 6) + 1;
+                this.onerror = null; // Prevent infinite loop
+                this.src = `assets/photo${fallbackNum}.jpg`;
+            };
+            bookPhotoImg.src = photoObj.img;
+        }
         if (bookCaptionText) bookCaptionText.textContent = `"${photoObj.text}"`;
         if (bookMemoryBadge) bookMemoryBadge.textContent = `${albumData.title} • PHOTO ${currentPhotoIdxInAlbum + 1}`;
         if (bookCounterPill) bookCounterPill.textContent = `PHOTO ${currentPhotoIdxInAlbum + 1} / ${albumData.photos.length}`;
