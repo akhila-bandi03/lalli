@@ -1827,20 +1827,212 @@ input:checked + .slider:before {
     margin-bottom: 2.5rem;
 }
 
-.post-cake-actions {
+.cake-slice {
+    position: absolute;
+    right: -80px;
+    bottom: 10px;
+    width: 60px;
+    height: 65px;
     display: flex;
-    justify-content: center;
-    gap: 1.25rem;
-    flex-wrap: wrap;
-}over {
-    background: rgba(255, 255, 255, 0.18);
-    color: #fff;
+    flex-direction: column;
+    align-items: center;
+    transition: transform 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.8s ease;
+    z-index: 10;
 }
 
-.wish-status {
-    font-size: 1.1rem;
-    color: var(--gold-bright);
+.cake-slice.hidden-slice {
+    opacity: 0;
+    transform: translateX(-40px) scale(0.2);
+    pointer-events: none;
+}
+
+.slice-layer {
+    width: 100%;
+    border-radius: 4px;
+}
+.slice-top { height: 18px; background: linear-gradient(135deg, #ff2a6d, #b5179e); }
+.slice-mid { height: 22px; background: linear-gradient(135deg, #7b2cbf, #480ca8); }
+.slice-bot { height: 25px; background: linear-gradient(135deg, #4361ee, #3f37c9); }
+
+.slice-berry {
+    position: absolute;
+    top: -16px;
+    font-size: 1.2rem;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+}
+
+.slice-plate {
+    width: 80px;
+    height: 10px;
+    background: var(--gold-gradient);
+    border-radius: 20px;
+    margin-top: 2px;
+}
+
+.golden-knife {
+    position: absolute;
+    top: -40px;
+    left: 50%;
+    transform: translateX(-50%) rotate(-45deg);
+    width: 120px;
+    height: 20px;
+    z-index: 20;
+    pointer-events: none;
+    transition: transform 1s ease, opacity 0.5s ease;
+}
+
+.golden-knife.hidden-knife {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-60px) rotate(-90deg);
+}
+
+.knife-blade {
+    width: 80px;
+    height: 16px;
+    background: linear-gradient(180deg, #ffffff, #e0e0e0, #b0b0b0);
+    clip-path: polygon(0 40%, 100% 0, 100% 100%, 0 60%);
+    border-radius: 0 4px 4px 0;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+}
+
+.knife-handle {
+    position: absolute;
+    left: -35px;
+    top: 2px;
+    width: 40px;
+    height: 12px;
+    background: var(--gold-gradient);
+    border-radius: 6px;
+}
+
+.knife-sparkle {
+    position: absolute;
+    right: -10px;
+    top: -5px;
+    font-size: 1rem;
+    animation: pulseGlow 1s infinite alternate;
+}
+
+.cake-custom-toolbar {
+    display: flex;
+    justify-content: center;
+    gap: 0.8rem;
+    flex-wrap: wrap;
+    margin-top: 1.5rem;
+    transition: opacity 0.8s ease;
+}
+
+.cake-custom-toolbar.hidden-step {
+    display: none !important;
+}
+
+.cake-tool-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.4rem;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 215, 0, 0.4);
+    border-radius: 30px;
+    color: #ffffff;
+    font-family: var(--font-body);
+    font-size: 0.95rem;
     font-weight: 600;
+    cursor: pointer;
+    backdrop-filter: blur(10px);
+    transition: var(--transition-smooth);
+}
+
+.cake-tool-btn:hover {
+    background: rgba(255, 215, 0, 0.2);
+    border-color: var(--gold-bright);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255, 215, 0, 0.3);
+}
+
+.cake-tool-btn.cut-tool {
+    background: linear-gradient(135deg, #ff2a6d 0%, #ff5252 100%);
+    border: none;
+    box-shadow: 0 4px 15px rgba(255, 42, 109, 0.5);
+}
+
+.cake-tool-btn.cut-tool:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 8px 25px rgba(255, 42, 109, 0.7);
+}
+
+/* Wish Lantern Card */
+.wish-lantern-card {
+    position: relative;
+    max-width: 580px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background: rgba(18, 9, 31, 0.75);
+    border: 1px solid rgba(255, 215, 0, 0.35);
+    border-radius: 20px;
+    backdrop-filter: blur(15px);
+    box-shadow: 0 15px 40px rgba(0,0,0,0.5), inset 0 0 20px rgba(255, 215, 0, 0.15);
+    text-align: center;
+    overflow: hidden;
+}
+
+.wish-card-glow {
+    position: absolute;
+    top: 0; left: 0; right: 0; height: 3px;
+    background: var(--gold-gradient);
+}
+
+.wish-lantern-card h3 {
+    font-family: var(--font-royal);
+    font-size: 1.35rem;
+    color: var(--gold-bright);
+    margin-bottom: 1.25rem;
+}
+
+.wish-input-group {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.wish-input-group input {
+    flex: 1;
+    min-width: 240px;
+    padding: 0.85rem 1.25rem;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 30px;
+    color: #ffffff;
+    font-family: var(--font-body);
+    font-size: 1rem;
+    outline: none;
+    transition: var(--transition-smooth);
+}
+
+.wish-input-group input:focus {
+    border-color: var(--gold-bright);
+    background: rgba(255, 255, 255, 0.14);
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
+}
+
+.send-wish-btn {
+    padding: 0.85rem 1.6rem;
+    background: var(--gold-gradient);
+    border: none;
+    border-radius: 30px;
+    color: #11051b;
+    font-family: var(--font-fun);
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    box-shadow: 0 6px 20px rgba(255, 215, 0, 0.4);
+    transition: var(--transition-smooth);
+}
+
+.send-wish-btn:hover {
+    transform: translateY(-2px) scale(1.04);
+    box-shadow: 0 10px 28px rgba(255, 215, 0, 0.6);
 }
 
 /* --------------------------------------------------------------------------

@@ -518,6 +518,38 @@
                         <!-- Plate & Underneath Floor Glow -->
                         <div class="cake-plate-gold"></div>
                         <div class="cake-floor-glow"></div>
+
+                        <!-- Slice of Cake Element (Separates when cut) -->
+                        <div id="cakeSlice" class="cake-slice hidden-slice">
+                            <div class="slice-layer slice-top"></div>
+                            <div class="slice-layer slice-mid"></div>
+                            <div class="slice-layer slice-bot"></div>
+                            <div class="slice-berry">🍓</div>
+                            <div class="slice-plate"></div>
+                        </div>
+
+                        <!-- Draggable Golden Knife -->
+                        <div id="goldenKnife" class="golden-knife hidden-knife">
+                            <div class="knife-blade"></div>
+                            <div class="knife-handle"></div>
+                            <div class="knife-sparkle">✨</div>
+                        </div>
+                    </div>
+
+                    <!-- Cake Interactive Decorator & Controls Toolbar -->
+                    <div id="cakeCustomToolbar" class="cake-custom-toolbar hidden-step">
+                        <button id="cutCakeInteractiveBtn" class="cake-tool-btn cut-tool">
+                            <i class="fa-solid fa-utensils"></i> <span>🔪 CUT THE CAKE</span>
+                        </button>
+                        <button id="relightCandlesBtn" class="cake-tool-btn">
+                            <i class="fa-solid fa-fire"></i> <span>🕯️ Relight Candles</span>
+                        </button>
+                        <button id="addStrawberriesBtn" class="cake-tool-btn">
+                            <i class="fa-solid fa-heart"></i> <span>🍓 Add Strawberries</span>
+                        </button>
+                        <button id="singSongBtn" class="cake-tool-btn">
+                            <i class="fa-solid fa-music"></i> <span>🎵 Sing Birthday Melody</span>
+                        </button>
                     </div>
                 </div>
 
@@ -532,12 +564,25 @@
                     </button>
                 </div>
 
-                <!-- Final Celebration Banner -->
+                <!-- Final Celebration Banner & Wish Lantern -->
                 <div id="finalCakeBanner" class="final-cake-banner hidden-step">
                     <h1 class="grand-birthday-title">
                         🎉 HAPPY BIRTHDAY <span class="dynamic-friend-name">LALLI</span>! ❤️
                     </h1>
-                    <p class="grand-subtext">Make a wish. You deserve it. ✨</p>
+                    <p class="grand-subtext">Make a wish. You deserve all the happiness in the world. ✨</p>
+
+                    <!-- Interactive Sky Wish Box -->
+                    <div class="wish-lantern-card">
+                        <div class="wish-card-glow"></div>
+                        <h3><i class="fa-solid fa-wand-magic-sparkles"></i> Make a Special Birthday Wish for <span class="dynamic-friend-name">Lalli</span></h3>
+                        <div class="wish-input-group">
+                            <input type="text" id="wishInput" placeholder="Write your secret wish here..." maxlength="120">
+                            <button id="sendWishBtn" class="send-wish-btn">
+                                <span>✨ RELEASE WISH TO THE STARS ✨</span>
+                            </button>
+                        </div>
+                        <div id="lanternFlyStage" class="lantern-fly-stage"></div>
+                    </div>
 
                     <div class="post-cake-actions">
                         <button id="proceedToSecretBtn" class="glow-action-btn secret-trigger-btn">

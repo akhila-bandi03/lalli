@@ -1183,13 +1183,151 @@ I still need my crazy best friend. 😂🫶
             if (cakeTeaserBox) cakeTeaserBox.style.display = 'none';
             if (blowActionContainer) blowActionContainer.style.display = 'none';
 
-            // Reveal Final Celebration Banner
+            // Reveal Cake Customization Toolbar & Final Celebration Banner
+            const cakeCustomToolbar = document.getElementById('cakeCustomToolbar');
+            if (cakeCustomToolbar) {
+                cakeCustomToolbar.classList.remove('hidden-step');
+                gsap.fromTo(cakeCustomToolbar, { opacity: 0, y: 15 }, { opacity: 1, y: 0, duration: 0.8 });
+            }
+
             finalCakeBanner.classList.remove('hidden-step');
             gsap.fromTo(finalCakeBanner,
                 { opacity: 0, scale: 0.85, y: 30 },
                 { opacity: 1, scale: 1, y: 0, duration: 1.2, ease: 'elastic.out(1, 0.6)' }
             );
         }, totalDuration);
+    }
+
+    // Interactive Cake Cutting & Custom Tools
+    const cutCakeInteractiveBtn = document.getElementById('cutCakeInteractiveBtn');
+    const relightCandlesBtn = document.getElementById('relightCandlesBtn');
+    const addStrawberriesBtn = document.getElementById('addStrawberriesBtn');
+    const singSongBtn = document.getElementById('singSongBtn');
+    const goldenKnife = document.getElementById('goldenKnife');
+    const cakeSlice = document.getElementById('cakeSlice');
+
+    if (cutCakeInteractiveBtn) {
+        cutCakeInteractiveBtn.addEventListener('click', () => {
+            playTone(600, 'sawtooth', 0.15, 0.2);
+
+            // Animate knife slicing down through cake
+            if (goldenKnife) {
+                goldenKnife.classList.remove('hidden-knife');
+                gsap.fromTo(goldenKnife,
+                    { x: '-50%', y: '-60px', opacity: 0, rotate: -45 },
+                    {
+                        x: '-50%', y: '40px', opacity: 1, rotate: 10, duration: 0.8, ease: 'power2.inOut',
+                        onComplete: () => {
+                            // Slice cut SFX & sparkles
+                            playTone(880, 'sine', 0.3, 0.3);
+                            if (typeof confetti === 'function') {
+                                confetti({ particleCount: 60, spread: 70, origin: { y: 0.6 } });
+                            }
+
+                            // Reveal cake slice sliding out to golden plate
+                            if (cakeSlice) {
+                                cakeSlice.classList.remove('hidden-slice');
+                                gsap.fromTo(cakeSlice,
+                                    { x: 0, scale: 0.2, opacity: 0 },
+                                    { x: 40, scale: 1, opacity: 1, duration: 1, ease: 'back.out(1.5)' }
+                                );
+                            }
+
+                            // Retract knife smoothly
+                            gsap.to(goldenKnife, { y: '-80px', opacity: 0, duration: 0.8, delay: 0.5 });
+                        }
+                    }
+                );
+            }
+        });
+    }
+
+    if (relightCandlesBtn) {
+        relightCandlesBtn.addEventListener('click', () => {
+            igniteCandlesOneByOne();
+        });
+    }
+
+    if (addStrawberriesBtn) {
+        addStrawberriesBtn.addEventListener('click', () => {
+            playTone(700, 'sine', 0.2, 0.2);
+            const topTier = document.querySelector('.tier-top');
+            if (topTier) {
+                for (let i = 0; i < 3; i++) {
+                    const berry = document.createElement('span');
+                    berry.textContent = '🍓';
+                    berry.style.position = 'absolute';
+                    berry.style.top = '-14px';
+                    berry.style.left = (25 + i * 50) + 'px';
+                    berry.style.fontSize = '1.2rem';
+                    berry.style.animation = 'bounceIn 0.5s ease forward';
+                    topTier.appendChild(berry);
+                }
+            }
+        });
+    }
+
+    if (singSongBtn) {
+        singSongBtn.addEventListener('click', () => {
+            startBirthdayMelody();
+            playFanfareSound();
+            if (typeof confetti === 'function') {
+                confetti({ particleCount: 100, spread: 90, origin: { y: 0.5 } });
+            }
+        });
+    }
+
+    // Sky Wish Lantern Release Handler
+    const sendWishBtn = document.getElementById('sendWishBtn');
+    const wishInput = document.getElementById('wishInput');
+
+    if (sendWishBtn && wishInput) {
+        sendWishBtn.addEventListener('click', () => {
+            const wishText = wishInput.value.trim() || `Happy Birthday ${friendName}! ✨`;
+
+            playTone(587.33, 'triangle', 0.4, 0.4);
+
+            // Create floating sky lantern element
+            const lantern = document.createElement('div');
+            lantern.className = 'sky-wish-lantern';
+            lantern.innerHTML = `
+                <div class="lantern-body">
+                    <span class="lantern-flame">🔥</span>
+                    <p class="lantern-text">"${wishText}"</p>
+                </div>
+            `;
+            lantern.style.position = 'fixed';
+            lantern.style.bottom = '100px';
+            lantern.style.left = (30 + Math.random() * 40) + '%';
+            lantern.style.padding = '1rem 1.5rem';
+            lantern.style.background = 'linear-gradient(135deg, rgba(255, 180, 0, 0.95), rgba(255, 80, 0, 0.95))';
+            lantern.style.borderRadius = '20px 20px 8px 8px';
+            lantern.style.boxShadow = '0 0 30px rgba(255, 165, 0, 0.9), 0 0 60px rgba(255, 80, 0, 0.6)';
+            lantern.style.color = '#ffffff';
+            lantern.style.fontFamily = 'var(--font-fun)';
+            lantern.style.fontWeight = 'bold';
+            lantern.style.zIndex = '999999';
+            lantern.style.pointerEvents = 'none';
+
+            document.body.appendChild(lantern);
+
+            // Animate lantern rising into space
+            gsap.to(lantern, {
+                y: '-120vh',
+                x: '+=60',
+                scale: 0.5,
+                opacity: 0,
+                duration: 6,
+                ease: 'power1.in',
+                onComplete: () => lantern.remove()
+            });
+
+            wishInput.value = '';
+            sendWishBtn.innerHTML = '<span>✨ WISH SENT TO THE HEAVENS! ❤️</span>';
+            setTimeout(() => {
+                sendWishBtn.innerHTML = '<span>✨ RELEASE ANOTHER WISH ✨</span>';
+            }, 3000);
+        });
     }
 
     // Microphone Blow Listener
