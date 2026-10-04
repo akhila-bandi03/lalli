@@ -1989,7 +1989,7 @@ I still need my crazy best friend. 😂🫶
                 initMemoryGallery();
                 break;
             case 5: // Cake Theatre
-                startCinematicCakeSequence();
+                if (typeof startCinematicCakeSequence === 'function') startCinematicCakeSequence();
                 break;
             case 6: // Secret Crazy Zone
                 startSecretLockSequence();
