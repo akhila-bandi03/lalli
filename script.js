@@ -1054,13 +1054,22 @@ I still need my crazy best friend. 😂🫶
     const micBlowBtn = document.getElementById('micBlowBtn');
     const finalCakeBanner = document.getElementById('finalCakeBanner');
     const cakeStageSpotlight = document.getElementById('cakeStageSpotlight');
-    const scrollToStatsBtn = document.getElementById('scrollToStatsBtn');
-    const scrollToGiftBtn = document.getElementById('scrollToGiftBtn');
+    const quickCakeBtn = document.getElementById('quickCakeBtn');
+
+    if (quickCakeBtn) {
+        quickCakeBtn.addEventListener('click', () => {
+            playTone(523.25, 'triangle', 0.5, 0.3);
+            if (curtainOverlay && curtainOverlay.classList.contains('active-page')) {
+                curtainOverlay.classList.remove('active-page');
+            }
+            window.goToStoryPage(5); // Page 6: Cake Cutting Stage
+        });
+    }
 
     if (cakeTimeBtn) {
         cakeTimeBtn.addEventListener('click', () => {
             playTone(523.25, 'triangle', 0.5, 0.3);
-            window.goToStoryPage(3); // Page 4: Scientific Analysis & Quotes
+            window.goToStoryPage(5); // Page 6: Cake Cutting Stage
         });
     }
 
