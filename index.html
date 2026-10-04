@@ -368,75 +368,145 @@
             </div>
         </section>
 
-        <!-- SECTION 4: CINEMATIC SINGLE-PHOTO MEMORY GALLERY -->
-        <section id="memoryGallery" class="section-container memory-cinematic-section story-page">
-            <!-- 1. Heavily blurred darkened photo backdrop -->
-            <div id="memoryBgBlur" class="memory-bg-blur" style="background-image: url('assets/photo1.jpg');"></div>
-            <div class="memory-dark-overlay"></div>
-            <div class="film-grain-overlay"></div>
-            <div class="dust-particles-overlay" id="dustParticlesOverlay"></div>
-            
-            <!-- Header Badge -->
-            <div class="section-header memory-header">
-                <div class="section-tag"><i class="fa-solid fa-heart"></i> PRECIOUS MEMORIES</div>
-                <h2 class="section-title">One Memory At A Time</h2>
-                <p class="section-subtitle">Click the photo to view full-screen</p>
+        <!-- SECTION 4: FLOATING INTERACTIVE ALBUM ZONE -->
+        <section id="memoryGallery" class="section-container floating-album-section story-page">
+            <div class="dreamy-album-bg">
+                <div class="warm-glow-orb"></div>
+                <div class="gold-particles-overlay" id="albumDustParticles"></div>
             </div>
 
-            <!-- 2. Center Stage: Single Polaroid Card + Quote Container -->
-            <div class="memory-display-container">
-                <!-- Physical Polaroid Photo Card -->
-                <div class="polaroid-memory-card" id="polaroidMemoryCard" title="Click to enlarge photo">
-                    <div class="polaroid-pin"><i class="fa-solid fa-paperclip"></i></div>
-                    <div class="polaroid-photo-frame">
-                        <img id="memoryPhoto" src="assets/photo1.jpg" alt="Best Friend Memory" class="polaroid-img">
-                        <div class="polaroid-shine"></div>
-                    </div>
-                    <div class="polaroid-footer">
-                        <span class="memory-badge" id="memoryBadge">MEMORY 01</span>
-                        <span class="click-hint-text"><i class="fa-solid fa-expand"></i> Tap photo for fullscreen</span>
+            <!-- Top Title -->
+            <div class="album-header">
+                <div class="album-header-tag"><i class="fa-solid fa-camera-retro"></i> FLOATING MEMORY ROOM</div>
+                <h2 class="album-main-title">📸 SOME MEMORIES DESERVE TO BE HELD FOREVER</h2>
+                <p id="floatingAlbumHint" class="album-subtitle-hint">Click any floating album to pause and open it ✨</p>
+            </div>
+
+            <!-- Floating Stage Container for 6 Physical Albums -->
+            <div class="floating-albums-stage" id="floatingAlbumsStage">
+                <!-- Album 1 -->
+                <div class="floating-album-card float-dir-left" data-album-id="0">
+                    <div class="album-cover">
+                        <div class="cover-gold-border"></div>
+                        <div class="album-badge">VOL. 01</div>
+                        <div class="album-title-text">OUR CHAOS ❤️</div>
+                        <div class="album-sticker">✨</div>
+                        <div class="album-status-badge hidden-status">❤️ OPENED</div>
+                        <button class="open-memory-btn hidden-btn">OPEN THIS MEMORY ❤️</button>
                     </div>
                 </div>
 
-                <!-- Best-Friendship / Bond Quote Box -->
-                <div class="memory-quote-card" id="memoryQuoteCard">
-                    <div class="quote-mark-icon"><i class="fa-solid fa-quote-left"></i></div>
-                    <div id="memoryQuoteText" class="memory-quote-text">
-                        "Some people come into your life as friends...<br>and slowly become family. ❤️"
+                <!-- Album 2 -->
+                <div class="floating-album-card float-dir-right" data-album-id="1">
+                    <div class="album-cover">
+                        <div class="cover-gold-border"></div>
+                        <div class="album-badge">VOL. 02</div>
+                        <div class="album-title-text">THE GOOD DAYS ✨</div>
+                        <div class="album-sticker">🌟</div>
+                        <div class="album-status-badge hidden-status">❤️ OPENED</div>
+                        <button class="open-memory-btn hidden-btn">OPEN THIS MEMORY ❤️</button>
+                    </div>
+                </div>
+
+                <!-- Album 3 -->
+                <div class="floating-album-card float-dir-top" data-album-id="2">
+                    <div class="album-cover">
+                        <div class="cover-gold-border"></div>
+                        <div class="album-badge">VOL. 03</div>
+                        <div class="album-title-text">STUPID MOMENTS 😂</div>
+                        <div class="album-sticker">🤪</div>
+                        <div class="album-status-badge hidden-status">❤️ OPENED</div>
+                        <button class="open-memory-btn hidden-btn">OPEN THIS MEMORY ❤️</button>
+                    </div>
+                </div>
+
+                <!-- Album 4 -->
+                <div class="floating-album-card float-dir-bottom" data-album-id="3">
+                    <div class="album-cover">
+                        <div class="cover-gold-border"></div>
+                        <div class="album-badge">VOL. 04</div>
+                        <div class="album-title-text">THE LITTLE THINGS 🫶</div>
+                        <div class="album-sticker">💖</div>
+                        <div class="album-status-badge hidden-status">❤️ OPENED</div>
+                        <button class="open-memory-btn hidden-btn">OPEN THIS MEMORY ❤️</button>
+                    </div>
+                </div>
+
+                <!-- Album 5 -->
+                <div class="floating-album-card float-dir-diag1" data-album-id="4">
+                    <div class="album-cover">
+                        <div class="cover-gold-border"></div>
+                        <div class="album-badge">VOL. 05</div>
+                        <div class="album-title-text">MEMORIES 📸</div>
+                        <div class="album-sticker">🎬</div>
+                        <div class="album-status-badge hidden-status">❤️ OPENED</div>
+                        <button class="open-memory-btn hidden-btn">OPEN THIS MEMORY ❤️</button>
+                    </div>
+                </div>
+
+                <!-- Album 6 -->
+                <div class="floating-album-card float-dir-diag2" data-album-id="5">
+                    <div class="album-cover">
+                        <div class="cover-gold-border"></div>
+                        <div class="album-badge">VOL. 06</div>
+                        <div class="album-title-text">JUST US ❤️</div>
+                        <div class="album-sticker">💌</div>
+                        <div class="album-status-badge hidden-status">❤️ OPENED</div>
+                        <button class="open-memory-btn hidden-btn">OPEN THIS MEMORY ❤️</button>
                     </div>
                 </div>
             </div>
 
-            <!-- 3. Navigation Controls Bar (Bottom) -->
-            <div class="memory-nav-bar">
-                <button id="prevMemoryBtn" class="memory-nav-btn prev-btn">
-                    <i class="fa-solid fa-arrow-left"></i> PREVIOUS
-                </button>
+            <!-- Opened Album 3D Scrapbook Modal -->
+            <div id="openedAlbumModal" class="opened-album-modal hidden-modal">
+                <div class="modal-backdrop-blur"></div>
+                <div class="scrapbook-book-wrapper" id="scrapbookBookWrapper">
+                    <!-- Close button -->
+                    <button id="closeAlbumModalBtn" class="close-album-btn">
+                        <i class="fa-solid fa-arrow-left"></i> <span>← BACK TO ALBUMS</span>
+                    </button>
 
-                <div class="memory-counter-pill" id="memoryCounterPill">
-                    <i class="fa-solid fa-film"></i> <span id="memoryCounterText">MEMORY 01 / 06</span>
+                    <!-- Scrapbook Book Inner -->
+                    <div class="scrapbook-book">
+                        <div class="book-spine"></div>
+                        
+                        <!-- Page Content -->
+                        <div class="book-page">
+                            <div class="photo-frame-polaroid">
+                                <img id="bookPhotoImg" src="p1.jpeg" alt="Scrapbook Memory Photo">
+                                <div class="tape-corner tape-tl"></div>
+                                <div class="tape-corner tape-tr"></div>
+                            </div>
+                            
+                            <div class="book-caption-box">
+                                <span class="book-memory-badge" id="bookMemoryBadge">VOL. 01 • PHOTO 01</span>
+                                <p id="bookCaptionText" class="book-caption-text">"That random day we didn't plan..."</p>
+                            </div>
+
+                            <!-- Page Navigation Controls -->
+                            <div class="book-nav-controls">
+                                <button id="bookPrevPhotoBtn" class="book-nav-btn"><i class="fa-solid fa-chevron-left"></i> PREVIOUS</button>
+                                <span id="bookCounterPill" class="book-counter-pill">MEMORY 01 / 04</span>
+                                <button id="bookNextPhotoBtn" class="book-nav-btn">NEXT <i class="fa-solid fa-chevron-right"></i></button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-
-                <button id="nextMemoryBtn" class="memory-nav-btn next-btn">
-                    NEXT <i class="fa-solid fa-arrow-right"></i>
-                </button>
             </div>
 
-            <!-- 4. Upload Custom Photos Bar -->
-            <div class="memory-upload-strip">
-                <i class="fa-solid fa-camera"></i>
-                <span>Want to add real photos with <strong class="dynamic-friend-name">LALLI</strong> to this album?</span>
-                <label for="photoUploader" class="upload-btn">
-                    <i class="fa-solid fa-upload"></i> Upload Photos
-                </label>
-                <input type="file" id="photoUploader" accept="image/*" multiple style="display:none;">
-            </div>
+            <!-- Finale Message Box (Revealed when all 6 albums opened) -->
+            <div id="albumFinaleCard" class="album-finale-card hidden-step">
+                <div class="finale-text-line line-1">"Every album had a memory..."</div>
+                <div class="finale-text-line line-2">"But every memory had you. ❤️"</div>
+                <div class="finale-text-line line-3">"Those little moments became some of my favourite parts of our story."</div>
 
-            <div class="page-action-row">
-                <button id="goToCakeBtn" class="continue-glow-btn">
-                    <span>🎂 BLOW CANDLES & CUT CAKE</span>
-                    <i class="fa-solid fa-cake-candles"></i>
-                </button>
+                <div class="finale-next-prompt">
+                    <h3>READY FOR ONE LAST SURPRISE? 👀</h3>
+                    <button id="goToCakeBtn" class="continue-glow-btn next-surprise-btn">
+                        <span>NEXT SURPRISE →</span>
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </div>
             </div>
         </section>
 

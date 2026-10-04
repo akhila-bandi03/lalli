@@ -1011,33 +1011,229 @@ I still need my crazy best friend. 😂🫶
     });
 
     // --------------------------------------------------------------------------
-    // 7. POLAROID FLIP CARDS & PHOTO UPLOADER
+    // 7. FLOATING INTERACTIVE ALBUM ZONE ENGINE
     // --------------------------------------------------------------------------
-    document.querySelectorAll('.flip-card').forEach(card => {
-        card.addEventListener('click', () => {
-            card.classList.toggle('flipped');
-            playTone(300, 'sine', 0.15, 0.15);
+    const floatingAlbumsData = [
+        {
+            id: 0,
+            title: "OUR CHAOS ❤️",
+            photos: [
+                { img: 'p1.jpeg', text: 'That random day we didn\'t plan...' },
+                { img: 'p2.jpeg', text: 'Somehow this became one of my favourite memories. ❤️' },
+                { img: 'p3.jpeg', text: 'Unfiltered laughter and pure madness! 😂' }
+            ]
+        },
+        {
+            id: 1,
+            title: "THE GOOD DAYS ✨",
+            photos: [
+                { img: 'p4.jpeg', text: 'Golden hour moments with the best person.' },
+                { img: 'p5.jpeg', text: 'No worries in the world, just good vibes.' },
+                { img: 'p6.jpeg', text: 'Making memories that will last a lifetime. ✨' }
+            ]
+        },
+        {
+            id: 2,
+            title: "STUPID MOMENTS 😂",
+            photos: [
+                { img: 'p7.jpeg', text: 'Proof that we cannot act normal for 5 minutes.' },
+                { img: 'p8.jpeg', text: 'Laughing so hard our cheeks hurt!' },
+                { img: 'p9.jpeg', text: 'The kind of funny moments words can\'t explain. 🤪' }
+            ]
+        },
+        {
+            id: 3,
+            title: "THE LITTLE THINGS 🫶",
+            photos: [
+                { img: 'p10.jpeg', text: 'It\'s always the simple conversations that mean the most.' },
+                { img: 'p1.jpeg', text: 'Late night chats and emergency snack raids.' },
+                { img: 'p2.jpeg', text: 'Grateful for every single little memory with you. 💖' }
+            ]
+        },
+        {
+            id: 4,
+            title: "MEMORIES 📸",
+            photos: [
+                { img: 'p3.jpeg', text: 'A snapshot of pure happiness.' },
+                { img: 'p4.jpeg', text: 'Every picture tells our story.' },
+                { img: 'p5.jpeg', text: 'Through all seasons, always by your side. 🎬' }
+            ]
+        },
+        {
+            id: 5,
+            title: "JUST US ❤️",
+            photos: [
+                { img: 'p6.jpeg', text: 'No matter how crazy life gets, you will always be my #1. ❤️' },
+                { img: 'p7.jpeg', text: 'Best friends forever and always!' },
+                { img: 'p8.jpeg', text: 'Thank you for being the most amazing bestie! ✨' }
+            ]
+        }
+    ];
+
+    let openedAlbumSet = new Set();
+    let currentAlbumIdx = 0;
+    let currentPhotoIdxInAlbum = 0;
+    let activePausedCard = null;
+
+    const floatingCards = document.querySelectorAll('.floating-album-card');
+    const openedAlbumModal = document.getElementById('openedAlbumModal');
+    const closeAlbumModalBtn = document.getElementById('closeAlbumModalBtn');
+    const bookPhotoImg = document.getElementById('bookPhotoImg');
+    const bookCaptionText = document.getElementById('bookCaptionText');
+    const bookMemoryBadge = document.getElementById('bookMemoryBadge');
+    const bookCounterPill = document.getElementById('bookCounterPill');
+    const bookPrevPhotoBtn = document.getElementById('bookPrevPhotoBtn');
+    const bookNextPhotoBtn = document.getElementById('bookNextPhotoBtn');
+    const floatingAlbumHint = document.getElementById('floatingAlbumHint');
+    const albumFinaleCard = document.getElementById('albumFinaleCard');
+
+    floatingCards.forEach(card => {
+        card.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const albumId = parseInt(card.getAttribute('data-album-id'), 10);
+
+            // If user clicked "OPEN THIS MEMORY ❤️" or clicked an already paused card -> Open Album
+            if (card.classList.contains('paused-album') || e.target.classList.contains('open-memory-btn')) {
+                openAlbumModal(albumId);
+                return;
+            }
+
+            // Click 1: Pause floating animation & focus album
+            if (activePausedCard && activePausedCard !== card) {
+                activePausedCard.classList.remove('paused-album');
+            }
+
+            activePausedCard = card;
+            card.classList.add('paused-album');
+            playTone(400, 'sine', 0.2, 0.15);
+
+            if (floatingAlbumHint) {
+                floatingAlbumHint.textContent = `Click "OPEN THIS MEMORY ❤️" on ${floatingAlbumsData[albumId].title}!`;
+            }
         });
     });
 
-    const photoUploader = document.getElementById('photoUploader');
-    if (photoUploader) {
-        photoUploader.addEventListener('change', (e) => {
-            const files = Array.from(e.target.files);
-            const cardImgs = document.querySelectorAll('.card-img');
-            files.forEach((file, index) => {
-                if (cardImgs[index]) {
-                    const reader = new FileReader();
-                    reader.onload = (event) => {
-                        cardImgs[index].src = event.target.result;
-                    };
-                    reader.readAsDataURL(file);
+    // Unpause album when clicking blank area in stage
+    const floatingAlbumsStage = document.getElementById('floatingAlbumsStage');
+    if (floatingAlbumsStage) {
+        floatingAlbumsStage.addEventListener('click', (e) => {
+            if (!e.target.closest('.floating-album-card')) {
+                if (activePausedCard) {
+                    activePausedCard.classList.remove('paused-album');
+                    activePausedCard = null;
+                    if (floatingAlbumHint) {
+                        floatingAlbumHint.textContent = 'Click any floating album to pause and open it ✨';
+                    }
                 }
-            });
-            if (files.length > 0) {
-                alert(`Successfully loaded ${files.length} custom photo(s) into the memory gallery! 🎉`);
             }
         });
+    }
+
+    function openAlbumModal(albumIdx) {
+        currentAlbumIdx = albumIdx;
+        currentPhotoIdxInAlbum = 0;
+        const albumData = floatingAlbumsData[albumIdx];
+
+        if (!albumData) return;
+
+        playTone(450, 'sine', 0.25, 0.2);
+
+        renderBookPage();
+
+        if (openedAlbumModal) {
+            openedAlbumModal.classList.remove('hidden-modal');
+            gsap.fromTo('#scrapbookBookWrapper',
+                { opacity: 0, scale: 0.8, rotateY: -25 },
+                { opacity: 1, scale: 1, rotateY: 0, duration: 0.8, ease: 'back.out(1.4)' }
+            );
+        }
+    }
+
+    function renderBookPage() {
+        const albumData = floatingAlbumsData[currentAlbumIdx];
+        if (!albumData || !albumData.photos.length) return;
+
+        const photoObj = albumData.photos[currentPhotoIdxInAlbum];
+
+        if (bookPhotoImg) bookPhotoImg.src = photoObj.img;
+        if (bookCaptionText) bookCaptionText.textContent = `"${photoObj.text}"`;
+        if (bookMemoryBadge) bookMemoryBadge.textContent = `${albumData.title} • PHOTO ${currentPhotoIdxInAlbum + 1}`;
+        if (bookCounterPill) bookCounterPill.textContent = `PHOTO ${currentPhotoIdxInAlbum + 1} / ${albumData.photos.length}`;
+
+        if (bookPrevPhotoBtn) bookPrevPhotoBtn.disabled = (currentPhotoIdxInAlbum === 0);
+        if (bookNextPhotoBtn) bookNextPhotoBtn.disabled = (currentPhotoIdxInAlbum === albumData.photos.length - 1);
+    }
+
+    if (bookPrevPhotoBtn) {
+        bookPrevPhotoBtn.addEventListener('click', () => {
+            if (currentPhotoIdxInAlbum > 0) {
+                currentPhotoIdxInAlbum--;
+                playTone(520, 'sine', 0.15, 0.15);
+                gsap.fromTo('.photo-frame-polaroid', { opacity: 0, scale: 0.95 }, { opacity: 1, scale: 1, duration: 0.4 });
+                renderBookPage();
+            }
+        });
+    }
+
+    if (bookNextPhotoBtn) {
+        bookNextPhotoBtn.addEventListener('click', () => {
+            const albumData = floatingAlbumsData[currentAlbumIdx];
+            if (albumData && currentPhotoIdxInAlbum < albumData.photos.length - 1) {
+                currentPhotoIdxInAlbum++;
+                playTone(580, 'sine', 0.15, 0.15);
+                gsap.fromTo('.photo-frame-polaroid', { opacity: 0, scale: 0.95 }, { opacity: 1, scale: 1, duration: 0.4 });
+                renderBookPage();
+            }
+        });
+    }
+
+    if (closeAlbumModalBtn) {
+        closeAlbumModalBtn.addEventListener('click', () => {
+            playTone(350, 'triangle', 0.3, 0.2);
+
+            gsap.to('#scrapbookBookWrapper', {
+                opacity: 0,
+                scale: 0.85,
+                duration: 0.4,
+                onComplete: () => {
+                    if (openedAlbumModal) openedAlbumModal.classList.add('hidden-modal');
+
+                    // Mark album as opened
+                    openedAlbumSet.add(currentAlbumIdx);
+                    const card = document.querySelector(`.floating-album-card[data-album-id="${currentAlbumIdx}"]`);
+                    if (card) {
+                        card.classList.remove('paused-album');
+                        card.classList.add('opened');
+                        const badge = card.querySelector('.album-status-badge');
+                        if (badge) badge.classList.remove('hidden-status');
+                    }
+
+                    activePausedCard = null;
+
+                    // Check if all 6 albums are opened
+                    if (openedAlbumSet.size >= 6) {
+                        if (floatingAlbumHint) floatingAlbumHint.textContent = 'All memory albums opened! ❤️';
+                        revealAlbumFinale();
+                    } else {
+                        if (floatingAlbumHint) floatingAlbumHint.textContent = 'Another memory is waiting... 👀';
+                    }
+                }
+            });
+        });
+    }
+
+    function revealAlbumFinale() {
+        if (albumFinaleCard) {
+            albumFinaleCard.classList.remove('hidden-step');
+            gsap.fromTo(albumFinaleCard,
+                { opacity: 0, scale: 0.85, y: 30 },
+                { opacity: 1, scale: 1, y: 0, duration: 1.2, ease: 'elastic.out(1, 0.6)' }
+            );
+
+            if (typeof confetti === 'function') {
+                confetti({ particleCount: 150, spread: 100, origin: { y: 0.6 } });
+            }
+        }
     }
 
     // --------------------------------------------------------------------------
