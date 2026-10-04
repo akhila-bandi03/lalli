@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grand Birthday Theatre — VIP Surprise</title>
+    <meta name="description" content="A luxury interactive theatre birthday surprise experience with red velvet curtains, fireworks, statistics, and magical reveals.">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Cinzel:wght@600;700;800;900&family=Fredoka:wght@400;600;700&family=Kalam:wght@400;700&family=Outfit:wght@300;400;600;700;800&family=Playfair+Display:ital,wght@0,700;1,600&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- Main Stylesheet -->
+    <link rel="stylesheet" href="styles.css?v=6">
+
+    <!-- GSAP & Canvas-Confetti CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+</head>
+<body>
+
+    <!-- 🎵 Background Song -->
+    <audio id="bgSongAudio" loop preload="auto" style="display:none;">
+        <source src="song.mpeg" type="audio/mpeg">
+        <source src="song.mp3"  type="audio/mpeg">
+        <source src="song.mp4"  type="audio/mp4">
+        <source src="song.ogg"  type="audio/ogg">
+        <source src="song.wav"  type="audio/wav">
+    </audio>
+
+    <!-- Background Audio & SFX Controls Floating Bar -->
+    <header class="top-controls">
+        <div class="controls-group">
+            <button id="audioToggleBtn" class="pill-btn" title="Toggle Sound & Music">
+                <i class="fa-solid fa-volume-high" id="audioIcon"></i>
+                <span id="audioText">Music ON</span>
+            </button>
+            <button id="replayCurtainBtn" class="pill-btn hidden" title="Replay Opening">
+                <i class="fa-solid fa-rotate-left"></i>
+                <span>Replay Stage</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Canvas Layer for Particles & Fireworks -->
+    <canvas id="fxCanvas"></canvas>
+
+    <!-- SECTION 1: RED CURTAINS OVERLAY -->
+    <section id="curtainOverlay" class="curtain-overlay story-page active-page">
+        <!-- Stage Lighting & Spotlight -->
+        <div class="stage-spotlight"></div>
+        <div class="stage-beams"></div>
+
+        <!-- Left Curtain -->
+        <div class="curtain curtain-left" id="curtainLeft">
+            <div class="velvet-fold fold-1"></div>
+            <div class="velvet-fold fold-2"></div>
+            <div class="velvet-fold fold-3"></div>
+            <div class="velvet-fold fold-4"></div>
+            <div class="velvet-fold fold-5"></div>
+            <!-- Rope & Tassel -->
+            <div class="rope-container rope-left">
+                <div class="golden-rope"></div>
+                <div class="golden-tassel">
+                    <div class="tassel-head"></div>
+                    <div class="tassel-skirt"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Curtain -->
+        <div class="curtain curtain-right" id="curtainRight">
+            <div class="velvet-fold fold-1"></div>
+            <div class="velvet-fold fold-2"></div>
+            <div class="velvet-fold fold-3"></div>
+            <div class="velvet-fold fold-4"></div>
+            <div class="velvet-fold fold-5"></div>
+            <!-- Rope & Tassel -->
+            <div class="rope-container rope-right">
+                <div class="golden-rope"></div>
+                <div class="golden-tassel">
+                    <div class="tassel-head"></div>
+                    <div class="tassel-skirt"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Top Valance / Arch -->
+        <div class="valance-top">
+            <div class="valance-swag"></div>
+            <div class="valance-swag"></div>
+            <div class="valance-swag"></div>
+            <div class="gold-fringe"></div>
+        </div>
+
+        <!-- Center Opening Invitation -->
+        <div class="curtain-center-card" id="curtainCard">
+            <div class="badge-tag"><i class="fa-solid fa-crown"></i> EXCLUSIVE PREMIERE</div>
+            <h1 class="invitation-title">I have a little surprise for you...</h1>
+            <p class="invitation-sub">A grand theatrical celebration crafted exclusively for your special day.</p>
+            <button id="enterStageBtn" class="enter-btn">
+                <span class="btn-sparkle"><i class="fa-solid fa-sparkles"></i></span>
+                <span class="btn-text">CLICK TO ENTER 🎁</span>
+                <span class="btn-glow"></span>
+            </button>
+            <div class="audio-hint"><i class="fa-solid fa-headphones"></i> Best experienced with sound turned ON</div>
+        </div>
+    </section>
+
+    <!-- MAIN CONTENT CONTAINER (Revealed after curtain opens) -->
+    <main id="mainStage" class="main-stage">
+
+        <!-- SECTION 2: BIRTHDAY REVEAL & CINEMATIC SEQUENCE -->
+        <section id="birthdayReveal" class="hero-section story-page">
+            <div class="hero-backdrop"></div>
+            
+            <!-- Warm Center Stage Spotlight -->
+            <div class="cinematic-spotlight" id="cinematicSpotlight"></div>
+
+            <div class="hero-content" id="heroContent">
+                <!-- Step 1: Teaser Message -->
+                <div class="reveal-step reveal-step-1" id="revealStep1">
+                    <span class="teaser-sparkle">✨</span> A little surprise for you...
+                </div>
+
+                <!-- Step 2: Birthday Greeting -->
+                <h2 class="reveal-step reveal-step-2" id="revealStep2">
+                    🎂 HAPPY BIRTHDAY
+                </h2>
+                
+                <!-- Step 3: Dramatic Letter-by-Letter Name Reveal -->
+                <div class="reveal-step reveal-step-3 name-letter-box" id="revealStep3">
+                    <span class="letter">L</span>
+                    <span class="letter">A</span>
+                    <span class="letter">L</span>
+                    <span class="letter">L</span>
+                    <span class="letter">I</span>
+                </div>
+
+                <!-- Step 4: Full Combined Title "❤️ HAPPY BIRTHDAY LALLI ❤️" -->
+                <div class="reveal-step reveal-step-4 final-title-box" id="revealStep4">
+                    <h1 class="hero-final-title">
+                        <span class="heart-pulse">❤️</span> 
+                        HAPPY BIRTHDAY 
+                        <span class="hero-name dynamic-friend-name" id="friendNameDisplay">LALLI</span> 
+                        <span class="heart-pulse">❤️</span>
+                    </h1>
+                    <p class="hero-subtext">To the world's most chaotic, legendary, and irreplaceable best friend! ✨</p>
+                </div>
+
+                <!-- Step 5: Large Elegant Button "💌 OPEN MY HEART ❤️" -->
+                <div class="reveal-step reveal-step-5" id="revealStep5">
+                    <button id="openHeartBtn" class="open-heart-btn">
+                        <span class="heart-btn-icon"><i class="fa-solid fa-heart"></i></span>
+                        <span class="heart-btn-text">OPEN MY HEART ❤️</span>
+                        <span class="heart-btn-glow"></span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Floating Interactive Balloons Container -->
+            <div id="balloonContainer" class="balloon-container"></div>
+        </section>
+
+        <!-- SECTION 2.5: PERSONAL BIRTHDAY MESSAGE ENVELOPE & LETTER -->
+        <section id="personalLetterSection" class="section-container letter-section story-page">
+            
+            <!-- Step 1 Teaser Overlay -->
+            <div id="letterTeaserBox" class="letter-teaser-box">
+                <p id="teaserText1" class="teaser-text">Okay... enough surprises.</p>
+                <p id="teaserText2" class="teaser-text hidden-teaser">There is something I really wanted to tell you...</p>
+            </div>
+
+            <!-- Step 2 Realistic 3D Envelope Container -->
+            <div id="envelopeContainer" class="envelope-container hidden-step">
+                <div class="envelope-header">
+                    <i class="fa-solid fa-heart header-heart"></i>
+                    <h2>For my crazy best friend, <span class="dynamic-friend-name">Lalli</span> ❤️</h2>
+                </div>
+
+                <div class="envelope-stage">
+                    <div id="envelopeWrapper" class="envelope-wrapper">
+                        <div class="envelope-back"></div>
+                        <div class="envelope-flap" id="envelopeFlap"></div>
+                        <div class="heart-seal" id="heartSeal">
+                            <i class="fa-solid fa-heart"></i>
+                        </div>
+                        <div class="envelope-letter-preview" id="letterPreview"></div>
+                        <div class="envelope-front"></div>
+                    </div>
+                </div>
+
+                <p class="envelope-hint">
+                    <i class="fa-solid fa-hand-pointer bounce-icon"></i> Open this...
+                </p>
+            </div>
+
+            <!-- Step 4 & 5 Unfolded Handwritten Letter -->
+            <div id="unfoldedLetterCard" class="unfolded-letter-card hidden-step">
+                <div class="handwritten-paper">
+                    <div class="paper-fold-shadow"></div>
+                    <div class="stamp-seal"><i class="fa-solid fa-shield-heart"></i></div>
+                    
+                    <!-- Line-by-line typewriter output container -->
+                    <div id="letterLineContainer" class="letter-line-container"></div>
+
+                    <!-- Step 6 After Reading Teaser & Cake Time Button -->
+                    <div id="letterFooter" class="letter-footer hidden-step">
+                        <p id="afterReadTeaser1" class="after-read-text">Okay... don't cry yet. 😂❤️</p>
+                        <p id="afterReadTeaser2" class="after-read-text hidden-teaser">Because there's still more... 👀</p>
+                        <button id="cakeTimeBtn" class="continue-glow-btn cake-time-btn hidden-teaser">
+                            <span>🔬 EXPLORE SCIENTIFIC ANALYSIS</span>
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 3: FUNNY FRIEND STATISTICS -->
+        <section id="statsSection" class="section-container stats-section story-page">
+            <div class="section-header">
+                <div class="section-tag"><i class="fa-solid fa-flask"></i> CONFIDENTIAL DOSSIER</div>
+                <h2 class="section-title">Scientific Analysis of <span class="dynamic-friend-name">LALLI</span></h2>
+                <p class="section-subtitle">Based on 10,000+ hours of forensic friendship observation & dubious lab testing.</p>
+            </div>
+
+            <!-- Interactive Roast / Toast Mode Switcher -->
+            <div class="mode-toggle-card">
+                <span class="mode-label roast-label">🔥 Savage Roast</span>
+                <label class="switch">
+                    <input type="checkbox" id="roastToastToggle" checked>
+                    <span class="slider round"></span>
+                </label>
+                <span class="mode-label toast-label">💖 Sweet Toast</span>
+            </div>
+
+            <!-- Stats Grid -->
+            <div class="stats-grid">
+                <!-- Stat Card 1 -->
+                <div class="stat-card" data-tilt>
+                    <div class="stat-icon-wrapper">
+                        <i class="fa-solid fa-masks-theater"></i>
+                    </div>
+                    <div class="stat-info">
+                        <div class="stat-header">
+                            <h3>Dramatics & Overreaction</h3>
+                            <span class="stat-value" id="statVal1">99.9%</span>
+                        </div>
+                        <div class="meter-bar-track">
+                            <div class="meter-bar-fill" style="width: 99.9%;"></div>
+                        </div>
+                        <p class="stat-desc" id="statDesc1">Treats a minor inconvenience like a 3-act Shakespearean tragedy.</p>
+                    </div>
+                </div>
+
+                <!-- Stat Card 2 -->
+                <div class="stat-card" data-tilt>
+                    <div class="stat-icon-wrapper">
+                        <i class="fa-solid fa-reply-all"></i>
+                    </div>
+                    <div class="stat-info">
+                        <div class="stat-header">
+                            <h3>Text Response Velocity</h3>
+                            <span class="stat-value" id="statVal2">Dual-Speed</span>
+                        </div>
+                        <div class="meter-bar-track">
+                            <div class="meter-bar-fill" style="width: 85%;"></div>
+                        </div>
+                        <p class="stat-desc" id="statDesc2">0.001s for hot gossip; 3–5 business days for simple questions.</p>
+                    </div>
+                </div>
+
+                <!-- Stat Card 3 -->
+                <div class="stat-card" data-tilt>
+                    <div class="stat-icon-wrapper">
+                        <i class="fa-solid fa-mug-hot"></i>
+                    </div>
+                    <div class="stat-info">
+                        <div class="stat-header">
+                            <h3>Caffeine & Sugar Intolerance</h3>
+                            <span class="stat-value" id="statVal3">Critical ☕</span>
+                        </div>
+                        <div class="meter-bar-track">
+                            <div class="meter-bar-fill" style="width: 94%;"></div>
+                        </div>
+                        <p class="stat-desc" id="statDesc3">Can run a small European country entirely on iced coffee and pure willpower.</p>
+                    </div>
+                </div>
+
+                <!-- Stat Card 4 -->
+                <div class="stat-card" data-tilt>
+                    <div class="stat-icon-wrapper">
+                        <i class="fa-solid fa-user-ninja"></i>
+                    </div>
+                    <div class="stat-info">
+                        <div class="stat-header">
+                            <h3>Food Radar Range</h3>
+                            <span class="stat-value" id="statVal4">5.0 Miles</span>
+                        </div>
+                        <div class="meter-bar-track">
+                            <div class="meter-bar-fill" style="width: 98%;"></div>
+                        </div>
+                        <p class="stat-desc" id="statDesc4">Can detect snacks, French fries, or boba from across 3 zip codes.</p>
+                    </div>
+                </div>
+
+                <!-- Stat Card 5 -->
+                <div class="stat-card" data-tilt>
+                    <div class="stat-icon-wrapper">
+                        <i class="fa-solid fa-user-secret"></i>
+                    </div>
+                    <div class="stat-info">
+                        <div class="stat-header">
+                            <h3>Secret Vault Security</h3>
+                            <span class="stat-value" id="statVal5">100% Locked</span>
+                        </div>
+                        <div class="meter-bar-track">
+                            <div class="meter-bar-fill" style="width: 92%;"></div>
+                        </div>
+                        <p class="stat-desc" id="statDesc5">Will guard your secrets to the grave (or until bribed with snacks).</p>
+                    </div>
+                </div>
+
+                <!-- Stat Card 6 -->
+                <div class="stat-card" data-tilt>
+                    <div class="stat-icon-wrapper">
+                        <i class="fa-solid fa-moon"></i>
+                    </div>
+                    <div class="stat-info">
+                        <div class="stat-header">
+                            <h3>Circadian Rhythm chaos</h3>
+                            <span class="stat-value" id="statVal6">3 AM - 1 PM</span>
+                        </div>
+                        <div class="meter-bar-track">
+                            <div class="meter-bar-fill" style="width: 89%;"></div>
+                        </div>
+                        <p class="stat-desc" id="statDesc6">Sends profound existential memes at 3:14 AM on a Tuesday.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Interactive Soundboard / Phrase Trigger -->
+            <div class="soundboard-box">
+                <h3><i class="fa-solid fa-bullhorn"></i> <span class="dynamic-friend-name">LALLI</span>'s Soundboard of Iconic Quotes</h3>
+                <p>Click any button below to trigger hilarious reactions!</p>
+                <div class="soundboard-buttons">
+                    <button class="sfx-btn" data-sound="gossip"><i class="fa-solid fa-fire"></i> "GIRL, GUESS WHAT?!"</button>
+                    <button class="sfx-btn" data-sound="dramatic"><i class="fa-solid fa-face-grimace"></i> "I'm literally crying right now"</button>
+                    <button class="sfx-btn" data-sound="hungry"><i class="fa-solid fa-utensils"></i> "Are we ordering food or what?"</button>
+                    <button class="sfx-btn" data-sound="tired"><i class="fa-solid fa-bed"></i> "I need a 5-hour nap immediately"</button>
+                    <button class="sfx-btn" data-sound="slay"><i class="fa-solid fa-gem"></i> "Absolute Slay 💅"</button>
+                </div>
+            </div>
+
+            <div class="page-action-row">
+                <button id="goToMemoriesBtn" class="continue-glow-btn">
+                    <span>📸 VIEW OUR MEMORIES</span>
+                    <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </div>
+        </section>
+
+        <!-- SECTION 4: CINEMATIC SINGLE-PHOTO MEMORY GALLERY -->
+        <section id="memoryGallery" class="section-container memory-cinematic-section story-page">
+            <!-- 1. Heavily blurred darkened photo backdrop -->
+            <div id="memoryBgBlur" class="memory-bg-blur" style="background-image: url('assets/photo1.jpg');"></div>
+            <div class="memory-dark-overlay"></div>
+            <div class="film-grain-overlay"></div>
+            <div class="dust-particles-overlay" id="dustParticlesOverlay"></div>
+            
+            <!-- Header Badge -->
+            <div class="section-header memory-header">
+                <div class="section-tag"><i class="fa-solid fa-heart"></i> PRECIOUS MEMORIES</div>
+                <h2 class="section-title">One Memory At A Time</h2>
+                <p class="section-subtitle">Click the photo to view full-screen</p>
+            </div>
+
+            <!-- 2. Center Stage: Single Polaroid Card + Quote Container -->
+            <div class="memory-display-container">
+                <!-- Physical Polaroid Photo Card -->
+                <div class="polaroid-memory-card" id="polaroidMemoryCard" title="Click to enlarge photo">
+                    <div class="polaroid-pin"><i class="fa-solid fa-paperclip"></i></div>
+                    <div class="polaroid-photo-frame">
+                        <img id="memoryPhoto" src="assets/photo1.jpg" alt="Best Friend Memory" class="polaroid-img">
+                        <div class="polaroid-shine"></div>
+                    </div>
+                    <div class="polaroid-footer">
+                        <span class="memory-badge" id="memoryBadge">MEMORY 01</span>
+                        <span class="click-hint-text"><i class="fa-solid fa-expand"></i> Tap photo for fullscreen</span>
+                    </div>
+                </div>
+
+                <!-- Best-Friendship / Bond Quote Box -->
+                <div class="memory-quote-card" id="memoryQuoteCard">
+                    <div class="quote-mark-icon"><i class="fa-solid fa-quote-left"></i></div>
+                    <div id="memoryQuoteText" class="memory-quote-text">
+                        "Some people come into your life as friends...<br>and slowly become family. ❤️"
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. Navigation Controls Bar (Bottom) -->
+            <div class="memory-nav-bar">
+                <button id="prevMemoryBtn" class="memory-nav-btn prev-btn">
+                    <i class="fa-solid fa-arrow-left"></i> PREVIOUS
+                </button>
+
+                <div class="memory-counter-pill" id="memoryCounterPill">
+                    <i class="fa-solid fa-film"></i> <span id="memoryCounterText">MEMORY 01 / 06</span>
+                </div>
+
+                <button id="nextMemoryBtn" class="memory-nav-btn next-btn">
+                    NEXT <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </div>
+
+            <!-- 4. Upload Custom Photos Bar -->
+            <div class="memory-upload-strip">
+                <i class="fa-solid fa-camera"></i>
+                <span>Want to add real photos with <strong class="dynamic-friend-name">LALLI</strong> to this album?</span>
+                <label for="photoUploader" class="upload-btn">
+                    <i class="fa-solid fa-upload"></i> Upload Photos
+                </label>
+                <input type="file" id="photoUploader" accept="image/*" multiple style="display:none;">
+            </div>
+
+            <div class="page-action-row">
+                <button id="goToCakeBtn" class="continue-glow-btn">
+                    <span>🎂 BLOW CANDLES & CUT CAKE</span>
+                    <i class="fa-solid fa-cake-candles"></i>
+                </button>
+            </div>
+        </section>
+
+        <!-- SECTION 2.8: CINEMATIC 3-STEP CAKE THEATRE STAGE -->
+        <section id="cakeTheatreSection" class="cake-theatre-section story-page">
+            <div class="cake-stage-spotlight" id="cakeStageSpotlight"></div>
+
+            <div class="cake-theatre-content">
+                <!-- Step 1: Teaser Text Overlay -->
+                <div id="cakeTeaserBox" class="cake-teaser-box">
+                    <p id="cakeTeaser1" class="cake-teaser-text">Okay <span class="dynamic-friend-name">Lalli</span>...</p>
+                    <p id="cakeTeaser2" class="cake-teaser-text hidden-step">It's officially cake time. 🎂</p>
+                    <p id="cakeTeaser3" class="cake-teaser-text hidden-step">Make a wish, <span class="dynamic-friend-name">Lalli</span>... ✨</p>
+                </div>
+
+                <!-- Step 2: Rising Cake Stage Container -->
+                <div id="risingCakeStage" class="rising-cake-stage hidden-step">
+                    <!-- Name Topper -->
+                    <div class="cake-topper-wrapper" id="cakeTopper">
+                        <div class="topper-crown"><i class="fa-solid fa-crown"></i></div>
+                        <div class="topper-text"><span class="dynamic-friend-name">LALLI</span> ❤️</div>
+                        <div class="topper-sticks">
+                            <div class="stick"></div>
+                            <div class="stick"></div>
+                        </div>
+                    </div>
+
+                    <!-- 5 Beautiful Candles Row -->
+                    <div class="candles-row-5" id="candlesRow5">
+                        <div class="candle-item candle-1" data-candle="1">
+                            <div class="flame-glow" id="flameGlow1"></div>
+                            <div class="flame" id="flame1"></div>
+                            <div class="smoke-puff" id="smoke1"></div>
+                        </div>
+                        <div class="candle-item candle-2" data-candle="2">
+                            <div class="flame-glow" id="flameGlow2"></div>
+                            <div class="flame" id="flame2"></div>
+                            <div class="smoke-puff" id="smoke2"></div>
+                        </div>
+                        <div class="candle-item candle-3" data-candle="3">
+                            <div class="flame-glow" id="flameGlow3"></div>
+                            <div class="flame" id="flame3"></div>
+                            <div class="smoke-puff" id="smoke3"></div>
+                        </div>
+                        <div class="candle-item candle-4" data-candle="4">
+                            <div class="flame-glow" id="flameGlow4"></div>
+                            <div class="flame" id="flame4"></div>
+                            <div class="smoke-puff" id="smoke4"></div>
+                        </div>
+                        <div class="candle-item candle-5" data-candle="5">
+                            <div class="flame-glow" id="flameGlow5"></div>
+                            <div class="flame" id="flame5"></div>
+                            <div class="smoke-puff" id="smoke5"></div>
+                        </div>
+                    </div>
+
+                    <!-- 3-Tier Luxury Cake -->
+                    <div class="luxury-cake-wrapper">
+                        <!-- Top Tier -->
+                        <div class="cake-tier tier-top">
+                            <div class="pearl-row"></div>
+                            <div class="drip-row">
+                                <div class="drip"></div><div class="drip"></div><div class="drip"></div>
+                            </div>
+                        </div>
+                        <!-- Middle Tier -->
+                        <div class="cake-tier tier-middle">
+                            <div class="pearl-row"></div>
+                            <div class="flower-decor"><i class="fa-solid fa-rose"></i></div>
+                            <div class="drip-row">
+                                <div class="drip"></div><div class="drip"></div><div class="drip"></div><div class="drip"></div>
+                            </div>
+                        </div>
+                        <!-- Bottom Tier -->
+                        <div class="cake-tier tier-bottom">
+                            <div class="pearl-row"></div>
+                            <div class="gold-band"></div>
+                            <div class="drip-row">
+                                <div class="drip"></div><div class="drip"></div><div class="drip"></div><div class="drip"></div><div class="drip"></div>
+                            </div>
+                        </div>
+                        <!-- Plate & Underneath Floor Glow -->
+                        <div class="cake-plate-gold"></div>
+                        <div class="cake-floor-glow"></div>
+                    </div>
+                </div>
+
+                <!-- Interactive Blow Candles Button -->
+                <div id="blowActionContainer" class="blow-action-container hidden-step">
+                    <button id="blowCandlesBtn" class="blow-candles-btn">
+                        <span class="btn-icon"><i class="fa-solid fa-wind"></i></span>
+                        <span>🕯️ BLOW THE CANDLES</span>
+                    </button>
+                    <button id="micBlowBtn" class="mic-btn">
+                        <i class="fa-solid fa-microphone"></i> Use Microphone
+                    </button>
+                </div>
+
+                <!-- Final Celebration Banner -->
+                <div id="finalCakeBanner" class="final-cake-banner hidden-step">
+                    <h1 class="grand-birthday-title">
+                        🎉 HAPPY BIRTHDAY <span class="dynamic-friend-name">LALLI</span>! ❤️
+                    </h1>
+                    <p class="grand-subtext">Make a wish. You deserve it. ✨</p>
+
+                    <div class="post-cake-actions">
+                        <button id="proceedToSecretBtn" class="glow-action-btn secret-trigger-btn">
+                            <i class="fa-solid fa-fire"></i> 😈 ENTER THE CRAZY ZONE
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 7: CRAZY ZONE PAGE (PAGE 7) -->
+        <div id="crazySectionPage" class="story-page crazy-page-wrapper">
+            <div class="cyber-grid-bg"></div>
+
+            <div class="crazy-zone-header">
+                <div class="floating-emojis">
+                    <span class="emoji-item">🤪</span>
+                    <span class="emoji-item">😈</span>
+                    <span class="emoji-item">💅</span>
+                    <span class="emoji-item">🔥</span>
+                    <span class="emoji-item">🍕</span>
+                </div>
+                <h1 class="crazy-zone-title">😈 WELCOME TO THE CRAZY ZONE</h1>
+                <p class="crazy-zone-intro">You made it this far... So now you get to see the stuff that should probably stay classified. 😂</p>
+            </div>
+
+            <!-- Classified Vault Grid -->
+            <div class="classified-grid">
+                <!-- Vault Item 1: Secret Photos -->
+                <div class="classified-card" data-vault="photos">
+                    <div class="card-glow-border"></div>
+                    <div class="classified-badge">TOP SECRET 📸</div>
+                    <h3>Forbidden Photo Vault</h3>
+                    <p>The unhinged, funny, and chaotic photos we promised never to post on Instagram.</p>
+                    <button class="vault-unlock-btn"><i class="fa-solid fa-key"></i> Reveal Photos</button>
+                    <div class="vault-content hidden-vault">
+                        <div class="vault-gallery-grid">
+                            <img src="https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&w=500&q=80" alt="Unfiltered Moment" class="vault-img">
+                            <img src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=500&q=80" alt="Crazy Laugh" class="vault-img">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Vault Item 2: Inside Jokes -->
+                <div class="classified-card" data-vault="jokes">
+                    <div class="card-glow-border"></div>
+                    <div class="classified-badge">CONFIDENTIAL 😂</div>
+                    <h3>Inside Jokes Archives</h3>
+                    <p>Phrases that make 0% sense to normal people but make us wheeze for 20 minutes.</p>
+                    <button class="vault-unlock-btn"><i class="fa-solid fa-face-grin-squint"></i> Unlock Jokes</button>
+                    <div class="vault-content hidden-vault">
+                        <ul class="jokes-list">
+                            <li><i class="fa-solid fa-ghost"></i> "Remember when we tried to act normal for 5 minutes and failed miserably?"</li>
+                            <li><i class="fa-solid fa-pizza-slice"></i> "The 2 AM emergency snack raid where we made life decisions."</li>
+                            <li><i class="fa-solid fa-burst"></i> "That one inside joke that doesn't even have words anymore, just a look."</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Vault Item 3: Friendship Facts -->
+                <div class="classified-card" data-vault="facts">
+                    <div class="card-glow-border"></div>
+                    <div class="classified-badge">CLASSIFIED 🧠</div>
+                    <h3>Friendship Forensic Facts</h3>
+                    <p>Scientific proof of why we are legally obligated to stay best friends forever.</p>
+                    <button class="vault-unlock-btn"><i class="fa-solid fa-brain"></i> Access Facts</button>
+                    <div class="vault-content hidden-vault">
+                        <div class="facts-box">
+                            <p>✔️ We know too many embarrassing secrets about each other to ever end the friendship.</p>
+                            <p>✔️ 99% telepathic communication accuracy just using eyebrow movements.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Vault Item 4: Secret Note -->
+                <div class="classified-card" data-vault="note">
+                    <div class="card-glow-border"></div>
+                    <div class="classified-badge">PRIVATE 💌</div>
+                    <h3>Secret Bestie Note</h3>
+                    <p>A short confidential note just for your eyes only.</p>
+                    <button class="vault-unlock-btn"><i class="fa-solid fa-envelope-open"></i> Read Note</button>
+                    <div class="vault-content hidden-vault">
+                        <p class="private-note-text">
+                            "No matter how old we get or how busy life gets, you will always be my #1 person to call when something crazy happens. Thank you for being YOU! ❤️"
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="crazy-zone-footer">
+                <button id="goToGiftFromCrazyBtn" class="glow-action-btn">
+                    <i class="fa-solid fa-gift"></i> <span>🎁 UNWRAP FINAL SURPRISE GIFT</span> <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- SECTION 8: GIFT BOX UNWRAPPING MINIGAME & FINALE (PAGE 8) -->
+        <section id="giftSection" class="section-container gift-section story-page">
+            <div class="section-header">
+                <div class="section-tag"><i class="fa-solid fa-gift"></i> SURPRISE UNBOXING</div>
+                <h2 class="section-title">The Masterpiece Gift Box</h2>
+                <p class="section-subtitle">Click the gift box repeatedly to unwrap all 3 layers of ribbon & paper!</p>
+            </div>
+
+            <div class="gift-stage">
+                <div class="gift-box" id="giftBox">
+                    <div class="gift-ribbon-v"></div>
+                    <div class="gift-ribbon-h"></div>
+                    <div class="gift-bow"></div>
+                    <div class="gift-lid"></div>
+                    <div class="gift-body"></div>
+                    <div class="gift-layer-badge" id="giftLayerBadge">Layer 1 / 3</div>
+                </div>
+
+                <!-- Unwrapped Certificate Modal / Reveal -->
+                <div id="trophyReveal" class="trophy-reveal hidden">
+                    <div class="certificate-card">
+                        <div class="cert-border">
+                            <i class="fa-solid fa-award cert-icon"></i>
+                            <h2>OFFICIAL CERTIFICATE</h2>
+                            <p class="cert-title">Best Friend of the Millennium</p>
+                            <p class="cert-body">
+                                Awarded to <strong class="dynamic-friend-name">LALLI</strong> for outstanding patience, unconditional loyalty, unmatched comedy, and tolerating me every single day.
+                            </p>
+                            <div class="cert-seal">
+                                <i class="fa-solid fa-seal"></i>
+                                <span>VERIFIED ROYAL</span>
+                            </div>
+                            <button id="claimAwardBtn" class="glow-action-btn">
+                                <i class="fa-solid fa-champagne-glasses"></i> Claim Royal Trophy & Launch Finale Fireworks!
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="page-action-row" style="margin-top: 3rem;">
+                <button id="replayCelebrationBtn" class="continue-glow-btn replay-glow-btn">
+                    <i class="fa-solid fa-rotate-left"></i>
+                    <span>REPLAY CELEBRATION FROM START ↺</span>
+                </button>
+            </div>
+
+            <!-- FOOTER -->
+            <footer class="royal-footer">
+                <p>Crafted with ❤️ for <span class="dynamic-friend-name">LALLI</span>'s Birthday Celebration</p>
+                <p class="copyright">© 2026 Grand Theatre Surprise — Best Friends Forever</p>
+            </footer>
+        </section>
+    </main>
+
+    <!-- 🧭 FLOATING STORY PROGRESS & NAVIGATION BAR -->
+    <nav id="storyNavBar" class="story-nav-bar">
+        <button id="prevPageBtn" class="nav-arrow-btn" title="Previous Page">
+            <i class="fa-solid fa-chevron-left"></i> <span>Prev</span>
+        </button>
+        <div class="story-progress-indicator">
+            <span id="storyStepTitle" class="story-step-title">Page 1 of 8: Grand Curtain Welcome</span>
+            <div class="story-dots" id="storyDots">
+                <span class="story-dot active" data-page="0" title="Grand Welcome"></span>
+                <span class="story-dot" data-page="1" title="Birthday Wish"></span>
+                <span class="story-dot" data-page="2" title="Heartfelt Letter"></span>
+                <span class="story-dot" data-page="3" title="Scientific Analysis"></span>
+                <span class="story-dot" data-page="4" title="Our Memories"></span>
+                <span class="story-dot" data-page="5" title="Cake Cutting"></span>
+                <span class="story-dot" data-page="6" title="Secret Crazy Zone"></span>
+                <span class="story-dot" data-page="7" title="Final Gift Box"></span>
+            </div>
+        </div>
+        <button id="nextPageBtn" class="nav-arrow-btn" title="Next Page">
+            <span>Next</span> <i class="fa-solid fa-chevron-right"></i>
+        </button>
+    </nav>
+
+
+
+    <!-- FULLSCREEN PHOTO LIGHTBOX MODAL -->
+    <div id="photoFullscreenModal" class="photo-fullscreen-modal hidden">
+        <div class="modal-backdrop-blur" id="modalBackdropBlur"></div>
+        <button id="closePhotoModalBtn" class="photo-modal-close-btn" title="Close Lightbox">&times;</button>
+        
+        <div class="photo-modal-container">
+            <div class="fullscreen-photo-wrapper">
+                <img id="modalPhotoImg" src="assets/photo1.jpg" alt="Enlarged Memory Photo">
+            </div>
+            <div class="fullscreen-quote-box">
+                <span class="fullscreen-badge" id="modalMemoryBadge">MEMORY 01</span>
+                <div class="fullscreen-quote-text" id="modalQuoteText"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main JavaScript Logic -->
+    <script src="script.js?v=6"></script>
+</body>
+</html>
