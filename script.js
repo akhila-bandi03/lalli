@@ -1222,47 +1222,6 @@ I still need my crazy best friend. 😂🫶
             }
         });
     }
-
-    // Microphone Blow Listener
-    if (micBlowBtn) {
-        micBlowBtn.addEventListener('click', async () => {
-            try {
-                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-                initAudioContext();
-                const micSource = audioCtx.createMediaStreamSource(stream);
-                const analyser = audioCtx.createAnalyser();
-                analyser.fftSize = 256;
-                micSource.connect(analyser);
-
-                alert('Listening into your microphone... Blow now into your mic! 🌬️');
-                const dataArray = new Uint8Array(analyser.frequencyBinCount);
-
-                const checkMicBlow = () => {
-                    analyser.getByteFrequencyData(dataArray);
-                    let sum = 0;
-                    for (let i = 0; i < dataArray.length; i++) sum += dataArray[i];
-                    let average = sum / dataArray.length;
-
-                    if (average > 45) { // Blow detected
-                        blowOutAllCandles();
-                        stream.getTracks().forEach(track => track.stop());
-                    } else {
-                        requestAnimationFrame(checkMicBlow);
-                    }
-                };
-                checkMicBlow();
-            } catch (err) {
-                alert('Microphone access unavailable or denied. Click "🕯️ BLOW THE CANDLES" instead! 😊');
-            }
-        });
-    }
-
-    if (scrollToStatsBtn) {
-        scrollToStatsBtn.onclick = () => {
-            window.goToStoryPage(3); // Page 4: Scientific Analysis
-        };
-    }
-
     // --------------------------------------------------------------------------
     // 8.5. SECRET PASSWORD LOCK & CRAZY ZONE ENGINE
     // --------------------------------------------------------------------------
